@@ -23,7 +23,7 @@ public class ProdutosDAO {
     ResultSet resultset;
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
     
-    public int cadastrarProduto (ProdutosDTO produto){
+    public int cadastrarProduto (ProdutosDTO produto) throws SQLException{
         
         PreparedStatement st = null;
     try {int status;
@@ -35,15 +35,14 @@ public class ProdutosDAO {
         
         status = st.executeUpdate();
         return status; 
-    } catch (SQLException ex) {
+    } 
+    catch (SQLException ex) {
         System.out.println("Erro ao conectar: " + ex.getMessage());
         return ex.getErrorCode();
     }
-        
-        
-        
+
     }
-    
+        
     public ArrayList<ProdutosDTO> listarProdutos(){
         
         return listagem;

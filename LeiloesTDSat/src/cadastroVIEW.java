@@ -1,4 +1,7 @@
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /*
@@ -152,7 +155,11 @@ public class cadastroVIEW extends javax.swing.JFrame {
         produto.setStatus(status);
         
         ProdutosDAO produtodao = new ProdutosDAO();
-        produtodao.cadastrarProduto(produto);
+        try {
+            produtodao.cadastrarProduto(produto);
+        } catch (SQLException ex) {
+            Logger.getLogger(cadastroVIEW.class.getName()).log(Level.SEVERE, null, ex);
+        }
         JOptionPane.showMessageDialog( null , "Cadastro realizado com sucesso");
         
     }//GEN-LAST:event_btnCadastrarActionPerformed

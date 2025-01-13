@@ -10,6 +10,7 @@
 
 import java.sql.PreparedStatement;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,10 +26,10 @@ public class ProdutosDAO {
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
     
     public int cadastrarProduto (ProdutosDTO produto) throws SQLException{
-        
+        this.conn = new conectaDAO().connectDB();
         PreparedStatement st = null;
     try {int status;
-        st = conn.prepareStatement("INSERT INTO uc11 (nome, valor, status) VALUES (?, ?, ?)");
+        st = conn.prepareStatement("INSERT INTO produtos (nome, valor, status) VALUES (?, ?, ?)");
         
         st.setString(1, produto.getNome());
         st.setDouble(2, produto.getValor());  
@@ -67,6 +68,23 @@ public class ProdutosDAO {
         return listagem;
     }
     
+    public void venderproduto (ProdutosDTO p){
+               String sql = "UPDATE produtos SET status = 'Vendido' WHERE id = ?";
+    
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/uc11", "root", "0665@180901Lb");
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+         
+        stmt.setInt(1, p.getId());  
+        int rowsUpdated = stmt.executeUpdate();
+        
+        return;  
+        
+    } catch (SQLException e) {
+        System.err.println("Erro ao atualizar o status do produto: " + e.getMessage());
+        return;
+        }
+    }
+   
     
     
         

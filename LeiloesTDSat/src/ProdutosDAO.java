@@ -48,7 +48,7 @@ public class ProdutosDAO {
         
     public ArrayList<ProdutosDTO> listarProdutos(){
         List<ProdutosDTO> lista = new ArrayList<>();
-        String sql = "SELECT * FROM uc11";
+        String sql = "SELECT * FROM produtos";
 
         try (PreparedStatement st = conn.prepareStatement(sql);
              ResultSet rs = st.executeQuery()) {
@@ -85,7 +85,7 @@ public class ProdutosDAO {
         }
     }
     public List<ProdutosDTO> listarProdutosVendidos() {
-    String sql = "SELECT id, nome, preco, status FROM produtos WHERE status = 'Vendido'";
+    String sql = "SELECT id, nome, valor, status FROM produtos WHERE status = 'Vendido'";
     List<ProdutosDTO> produtosVendidos = new ArrayList<>();
     
     try (Connection conn = new conectaDAO().connectDB();
@@ -96,7 +96,7 @@ public class ProdutosDAO {
             ProdutosDTO produto = new ProdutosDTO();
             produto.setId(rs.getInt("id"));
             produto.setNome(rs.getString("nome"));
-            produto.setValor(rs.getInt("preco"));
+            produto.setValor(rs.getInt("Valor"));
             produto.setStatus(rs.getString("status"));
             produtosVendidos.add(produto);
         }
@@ -107,7 +107,22 @@ public class ProdutosDAO {
     
     return produtosVendidos;
 }
-
+public boolean venderProduto(int idProduto) {
+    String sql = "UPDATE produtos SET status = 'Vendido' WHERE id = ?";
+    conectaDAO dao = new conectaDAO();
+    try (Connection conn = dao.connectDB();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        
+        stmt.setInt(1, idProduto);
+        int rowsUpdated = stmt.executeUpdate();
+        
+        return rowsUpdated > 0;
+        
+    } catch (SQLException e) {
+        System.err.println("Erro ao vender produto: " + e.getMessage());
+        return false;
+    }
+}
     }
    
     
